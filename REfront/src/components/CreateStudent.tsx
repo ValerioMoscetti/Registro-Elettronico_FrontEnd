@@ -8,10 +8,10 @@ const postStudentUrl:string = ""
 const StudentFormSchema = z.object({
     firstName: z.string().min(1, "il nome è obbligatorio"),
     lastName: z.string().min(1, "il nome è obbligatorio"),
-    birthDate: z.date(),
+    birthDate: z.string(),
     email: z.email().min(1, "il nome è obbligatorio"),
     classId: z.string().min(1, "il nome è obbligatorio"),
-    parentId: z.number().min(1,"l'id non deve essere vuoto")
+    parentId: z.string().min(1,"l'id non deve essere vuoto")
 })
 
 type FormShema = z.infer<typeof StudentFormSchema>
@@ -27,10 +27,10 @@ export function CreateStudentForm(){
             defaultValues: {
                 firstName: "",
                 lastName: "",
-                birthDate: new Date,
+                birthDate: "gg/mm/aaaa",
                 email: "",
                 classId: "",
-                parentId: 0
+                parentId: ""
             }
         })
 
@@ -38,10 +38,16 @@ export function CreateStudentForm(){
 
         try{
 
-            const addStudent = await api.post(postStudentUrl, JSON.stringify(data, null, 2))
+          console.log(data)
 
+          const addStudent = await api.post(postStudentUrl, data)
+
+          
+          /** una volta inseriti posso fare il resoconto della classe o tornare alla home */
+
+            
         }catch(error){
-            console.log("Create student Error", error)
+          console.log("Create student Error", error)
         }
 
 
@@ -83,7 +89,7 @@ export function CreateStudentForm(){
         {...register("birthDate", { required: true })}
         placeholder="data di nascita dello studente"
         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-        type="color"
+        type="date"
       />
       {errors.birthDate && (
         <p className="text-red-500 text-sm mt-1">{errors.birthDate.message}</p>

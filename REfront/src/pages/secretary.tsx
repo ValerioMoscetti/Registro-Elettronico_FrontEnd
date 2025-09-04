@@ -1,10 +1,12 @@
-
+import { GestioneSegreteria } from "@/components/GestioneSegreteria"
 
 
 export function Secretary(){
 
 
     return(
-        <>Secretary</>
+        <>
+            <GestioneSegreteria></GestioneSegreteria>
+        </>
     )
 }
