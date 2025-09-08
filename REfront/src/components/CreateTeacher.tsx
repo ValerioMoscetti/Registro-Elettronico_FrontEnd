@@ -4,13 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import api from "@/api"
 import type { RegisterTeacher } from "@/types/Register"
 import { useState } from "react"
+import type { Register } from "react-router-dom"
 //nome cognome email classe e materia
 
 
 
 
 
-const postTeacherUrl: string = ""
+const registerUrl: string = "/api/auth/register"
 
 const MateriaSchema = z.object({
   materiaId: z.string(),
@@ -47,15 +48,22 @@ export function CreateTeacherForm() {
 
 
 
-    const newData = {
-
-    };
+    const newData: RegisterTeacher = {
+      role: "TEACHER",
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      subjects: []
+    }
     console.log("risultato Form:")
     console.log(newData)
 
     try {
 
-      const addTeacher = await api.post(postTeacherUrl, newData)
+      const addTeacher = await api.post(registerUrl, newData)
+
+      setResponse(addTeacher.data)
+      console.log("ok", response)
 
     } catch (error) {
       console.log("Create student Error", error)
@@ -117,7 +125,6 @@ export function CreateTeacherForm() {
 
 
 
-        {/* Submit */}
         <button
           type="submit"
           className="w-full py-3 px-6 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200"

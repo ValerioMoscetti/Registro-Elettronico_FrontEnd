@@ -6,7 +6,7 @@ import type { SubmitHandler } from "react-hook-form"
 import { Link } from "react-router-dom"
 import { useState, type ReactNode } from "react"
 
-const postParentUri: string = ""
+const postParentUri: string = "/api/auth/register"
 
 const parentFormSchema = z.object({
   firstName: z.string().min(1, "il nome è obbligatorio"),
@@ -38,11 +38,13 @@ export function CreateParentForm() {
 
   const onSubmit: SubmitHandler<FormShema> = async (data) => {
 
+    const newData = {...data, role: "PARENT"}
+
     try {
 
-      const addStudent = await api.post(postParentUri, data)
+      const addStudent = await api.post(postParentUri, newData)
 
-      console.log(data)
+      console.log(newData)
 
 
 
@@ -50,7 +52,7 @@ export function CreateParentForm() {
       console.log("Create parent Error", error)
     }
 
-    setLink(<Link to="/studentForm">Inserisci lo studente</Link>)
+    setLink(<Link to="/studentForm" state={data}>Inserisci lo studente</Link>)
   }
 
   return (

@@ -43,6 +43,7 @@ return (
     <div className="flex space-x-4 text-blue-500 underline">
       <Link to="/teacherForm" className="hover:text-blue-700">Inserisci Insegnante</Link>
       <Link to="/parentForm" className="hover:text-blue-700">Inserisci Genitore</Link>
+      <Link to="/studentForm" className="hover:text-blue-700">Inserisci Studente</Link>
     </div>
   </div>
 )

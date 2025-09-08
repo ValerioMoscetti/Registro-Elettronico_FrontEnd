@@ -5,16 +5,28 @@
 //insegnante:
 
 type Subject = {
-    
+
     subjectId: string,
-    classIds: string[]
+    classeIds: string[]
 }
 
 export type RegisterTeacher = {
-    role: "Teacher",
+    role: "TEACHER",
     firstName: string,
     lastName: string,
-    email:string,
+    email: string,
     subjects: Subject[]
-    
+
+}
+
+//studente:
+
+export type RegisterStudent = {
+    role: "STUDENT",
+    firstName: string,
+    lastName: string,
+    email: string,
+    birthDate: string,
+    parentId: string,
+    classId: string
 }
