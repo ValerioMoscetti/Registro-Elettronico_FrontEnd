@@ -1,10 +1,13 @@
+import Navbar from "@/components/navBar"
+
+export function Student() {
 
 
-export function Student(){
 
-
-
-    return(
-        <>Student</>
+    return (
+        <>
+            <Navbar />
+            Student
+        </>
     )
 }

@@ -1,12 +1,16 @@
 import type { ReactInstance, ReactNode } from "react";
 import { LoginForm } from "@/components/LoginForm";
+import Navbar from "@/components/navBar";
 
 
 
-export function Login(){
+export function Login() {
 
 
-    return(
-        <LoginForm/>
+    return (
+        <>
+            <Navbar />
+            <LoginForm />
+        </>
     )
 }

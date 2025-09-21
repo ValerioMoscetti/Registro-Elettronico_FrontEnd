@@ -1,17 +1,11 @@
 
-import z from "zod";
 import { use, useEffect, type ReactNode } from "react";
 import api from "@/api";
 import type { Class, Subject, SubjectClass, Teacher } from "@/types/ClassControl";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { data } from "react-router-dom";
 
 
-
-//tipi delle risposte
-const dummyClass: Class[] = []
-const dummySubjectClass: SubjectClass[] = []
 
 export function GestioneMateriaClasse() {
 
@@ -172,7 +166,7 @@ function TeacherClassForm({ subjectClass, classId }: { subjectClass: SubjectClas
 
         try {
             const response = api.put(`/api/subjectclass/${subjectClass?.id}/teacher/${teacher?.id}`)
-            
+
             console.log((await response).status)
 
         } catch (error) {

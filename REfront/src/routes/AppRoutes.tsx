@@ -15,7 +15,7 @@ import {LessonRecord} from "@/components/LessonRecod"
 import { PresenzaStudenti } from "@/components/PresenzeStudenti"
 import {VisualizzaStudenti} from "@/components/VisualizazioneStudenti"
 import { AssegnazioneCompiti } from "@/components/AssegnazioneCompiti"
-import { VisualizzaVotiInsegnante } from "@/components/VisualizzaVotiInsegnate"
+import { ElencoStudenti } from "@/components/ElencoStudenti"
 import { GestioneMateriaClasse } from "@/components/GestioneMateriaClasse"
 
 export function AppRoutes(){
@@ -34,13 +34,12 @@ export function AppRoutes(){
             <Route path="/teacher" element={<Teacher/>}>
                 <Route path="presenza" element={<PresenzaStudenti/>}/>
                 <Route path="lessonRecord" element={<LessonRecord/>}/>
-                <Route path="gestioneClasse" element={<VisualizzaStudenti/>}/>
+                <Route path="gestisciStudenti" element={<VisualizzaStudenti/>}/>
                 <Route path="assegnazioneCompiti" element={<AssegnazioneCompiti/>}/>
             </Route>
             <Route path="/teacherForm" element={<CreateTeacherForm></CreateTeacherForm>}/>
             <Route path="/parentForm" element={<CreateParentForm/>}/>
             <Route path="/studentForm" element={<CreateStudentForm/>}/>
-            <Route path="/voti" element={<VisualizzaVotiInsegnante/>}/>
             
             
             <Route path="*" element={<PageNotFound/>}/>

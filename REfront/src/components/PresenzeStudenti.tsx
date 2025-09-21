@@ -1,83 +1,97 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import api from "@/api"
+import { useLocation } from "react-router-dom"
 
-type Assenza = {
-  day: number
-  monthName: string
-  startHour: string
-  endHour: string
-  studentId: string | null
-  classId: string | null
+type PresenceStatus = "PRESENT" | "ABSENT" | "EXCUSED"
+
+type PresenceType = {
+  status: PresenceStatus
+  studentId: string;
+  date: string; // formato ISO -> "YYYY-MM-DD"
+};
+
+
+type StudentType = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  role: "STUDENT";
+  email: string
 }
 
-type StudentProva = {
-  nome: string,
-  id: string
-}
-
-type ClassProva = {
-  nome: string,
-  id: string
-}
-
-const arrayStudenti: StudentProva[] = [
-  { nome: "gianni", id: "1a3f2b60-9c4e-4f3e-8c1a-2d7f8a9b6e3c" },
-  { nome: "pino", id: "7e9d4c12-3b8f-4a2e-bd1f-9c0e1a7d2f45" }
-]
-
-const arrayClass: ClassProva[] = [
-  { nome: "1A", id: "c6a8e3d9-5f2b-4c1e-9a3d-8b7f2e6c1d90" },
-  { nome: "2A", id: "f2d3a1b7-8c9e-4d2f-b1a3-7e6c9d0f2b18" }
-]
-
-
-
-
-
-// select dello studente - select della classe
 export function PresenzaStudenti() {
 
-  //fare le fetch per ottenere l'oggetto studenti e classi e mettere i nomi nelle option della select
-  // e l'uuid nel value del'option 
+  //studente get
+  const [students, setStudents] = useState<StudentType[] | null>(null)
+  //nome studente 
+  const [studentsNames, setStudentsNames] = useState<string[]>([])
 
-
-
-
-
-  const [studenti, setStudenti] = useState<StudentProva[]>(arrayStudenti)
-  const [classi, setClassi] = useState<ClassProva[]>(arrayClass)
-
-
-
-
-
+  //parametri temporali
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [startTime, setStartTime] = useState<string>(new Date().toLocaleTimeString())
   const [endTime, setEndTime] = useState<string>(new Date().toLocaleTimeString())
-  const [studentId, setStudentId] = useState<string | null>(null)
-  const [classId, setClassId] = useState<string | null>(null)
-  const [assenzaStudente, setAssenzaStudente] = useState<Assenza | null>(null)
+  //array degli studenti assenti - FONDAMENTALE
+  const [assenzaStudenti, setAssenzaStudenti] = useState<PresenceType[]>([])
 
-  const handleSubmit = () => {
-    if (!date) return
 
-    const assenza: Assenza = {
-      day: date.getDate(),
-      monthName: date.toLocaleString("it-IT", { month: "long" }),
-      startHour: startTime,
-      endHour: endTime,
-      studentId: studentId,
-      classId: classId
+  const location = useLocation()
+
+  useEffect(() => {
+    const getStudent = async () => {
+      try {
+
+
+        const response = await api.get<StudentType[]>("/api/students/class/" + location.state.classId as string)
+
+        console.log(response.data)
+
+        setStudents(response.data)
+      } catch (error) {
+        console.log(error)
+      }
     }
 
-    setAssenzaStudente(assenza)
+    getStudent()
+  }, [])
 
-    console.log(assenza)
+  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const id: string=e.target.value
+    if (date && students) {
+      const aS: PresenceType = {
+        date: date.toISOString().split("T")[0],
+        status: "ABSENT",
+        studentId: id
+      }
+      
+      setAssenzaStudenti(prev => [...prev, aS])
+      
+      const newStudents:StudentType[] = students
+      .filter(s=>s.id!==id)
+
+      const newStudentsNames: string[] = students
+      .filter(s=>s.id===id).map(s=>s.firstName + " " + s.lastName)
+
+      setStudents(newStudents)
+      setStudentsNames(newStudentsNames)
+    }
+
+
+  }
+
+  const handleSubmit = async () => {
+
+    try {
+      console.log(assenzaStudenti)
+
+      const resposne = await api.post("/api/presences", assenzaStudenti)
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -129,15 +143,9 @@ export function PresenzaStudenti() {
         <p>Definisci i dati dell'assenza</p>
 
         <select title="st" name="studentSelect" id="student"
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStudentId(e.target.value)}>
+          onChange={(e)=>handleSelect(e)}>
           <option value="">Seleziona uno studente</option>
-          {studenti.map((s, index) => (<option key={index} value={s.id}>{s.nome}</option>))}
-        </select>
-
-        <select title="cl" name="classSelect" id="class"
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setClassId(e.target.value)}>
-          <option value="">Seleziona una classe</option>
-          {classi.map((s, index) => (<option key={index} value={s.id}>{s.nome}</option>))}
+          {students?.map((s, index) => (<option key={index} value={s.id}>{s.firstName}</option>))}
         </select>
 
 
@@ -149,12 +157,13 @@ export function PresenzaStudenti() {
           Invia assenza
         </button>
 
-        {assenzaStudente ? (
+        {studentsNames.length>0 ? (
           <ul className="space-y-1">
-            <li> Giorno: {assenzaStudente.day}</li>
-            <li> Mese: {assenzaStudente.monthName}</li>
-            <li> Ora inizio: {assenzaStudente.startHour}</li>
-            <li> Ora fine: {assenzaStudente.endHour}</li>
+            Gli studenti:
+            {studentsNames.map(s=>(
+              <li>{s}</li>
+            ))}
+            sono assenti.
           </ul>
         ) : (
           <span className="text-muted-foreground">Devi scegliere la data e compilare i campi</span>
