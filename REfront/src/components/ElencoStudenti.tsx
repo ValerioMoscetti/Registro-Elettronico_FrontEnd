@@ -46,8 +46,9 @@ export function ElencoStudenti(
     }
 ) {
 
-  const [students_Votes, setStudents_Votes] = useState<Students_Vote[]>([])
-
+  const [student_Votes, setStudent_Votes] = useState<Students_Vote[]>([])
+  
+  //deriva dalla context, è un dato che si aggiorna per permettere a un compoente di cambiare lo stato di un altro
   const { update } = useUser()
 
 
@@ -55,7 +56,7 @@ export function ElencoStudenti(
 
     console.log("update:", update)
 
-    setStudents_Votes([])
+    setStudent_Votes([])
 
     const getStudent_Votes = async (student: StudentType) => {
       try {
@@ -73,7 +74,9 @@ export function ElencoStudenti(
 
           console.log("student_vote: ", student_vote)
 
-          setStudents_Votes(prev => {
+          //funzione che verifica i duplicati nell'array student_Votes
+          //ma penso non serva...
+          setStudent_Votes(prev => {
             const alreadyExists = prev.some(s => s.student.id === student.id);
             return alreadyExists ? prev : [...prev, student_vote];
           });
@@ -96,16 +99,11 @@ export function ElencoStudenti(
       });
     }
 
-
-    return()=>{
-      
-    }
-
-
-
   }, [update])
 
-  if (students_Votes) {
+  if (student_Votes) {
+
+    //forse meglio cambiare la tabella con una semplice lista...
     return (
       <Table>
         <TableHeader>
@@ -116,7 +114,7 @@ export function ElencoStudenti(
           </TableRow>
         </TableHeader>
         <TableBody>
-          {students_Votes.map((s, index) => (
+          {student_Votes.map((s, index) => (
             <TableRow 
             key={index}
             onClick={()=>onClick(s.student)}
@@ -124,7 +122,7 @@ export function ElencoStudenti(
             >
               <TableCell className="font-medium">{s.student.lastName}</TableCell>
               <TableCell>{s.student.firstName}</TableCell>
-              <TableCell className="text-right" /**devo andare al dettaglio onClick */>
+              <TableCell className="text-right" /**devo andare al dettaglio dei voti onClick */>
                 {mediaVoti(s.votes)}
               </TableCell>
             </TableRow>
@@ -140,7 +138,7 @@ export function ElencoStudenti(
 
 }
 
-
+//funzione ceh calcola la media dei voti
 function mediaVoti(votes: Vote_Get[]): string {
   return (votes.reduce((a, c) => a + c.vote, 0) / votes.length).toFixed(1)
 }

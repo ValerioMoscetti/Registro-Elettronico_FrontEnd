@@ -18,7 +18,7 @@ interface UserContextType {
     update:number
 }
 
-interface DecodedToken {
+interface DecodedToken { //il token è stato implementato a metà
     id: string
     firstName: string
     lastName: string
@@ -29,14 +29,15 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserPovider({ children }: { children: ReactNode }) {
 
-    const navigate = useNavigate()
+    const navigate = useNavigate()//navigate per la logout
     const [user, setUser] = useState<User | null>(null)
-    const [subjectClasses, setSubjectClass] = useState<SubjectClass[]>([])
-    const [update,setUpdate] = useState<number>(0)
+    const [subjectClasses, setSubjectClass] = useState<SubjectClass[]>([]) //subject class per la teacher
+    const [update,setUpdate] = useState<number>(0)//contatore che ci permette di triggherare useEffects
 
-
+    //per cambiare lo user
     const toggleUser = (user: User) => setUser(user)
 
+    //per cambiare lo user 
     const setUserFromUser = (user: User) => {
         const userData: User = {
             id: user.id,
@@ -51,7 +52,7 @@ export function UserPovider({ children }: { children: ReactNode }) {
 
     }
 
-    //FARE CIO NEL GESTIONE PROFESSORE 
+    //FARE CIO NEL GESTIONE PROFESSORE?? 
 
     useEffect(() => {
 

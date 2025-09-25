@@ -77,6 +77,9 @@ type Vote_Post = {
     subjectClassId: string
 }
 
+
+////////////ASSEGNA VOTI - FIGLIO ////////////////////////
+
 function AssegnaVoti(
     {
         studenteDettaglio,
@@ -156,6 +159,9 @@ type Reprimand_Post = {
     createdAt: string
 }
 
+
+//////REPRIMAND - FIGLIO //////////////////////////////////////////////////////////////
+
 function Reprimand(
     {
         studenteDettaglio,
@@ -227,7 +233,8 @@ function Reprimand(
 
 
 
-
+//funzione per lo stile dei bottoni, a seconda se è visualizzato il componente reprimand o vote il bottone 
+//in questione verrà colorato di bianco e i bordi e la scritta del proprio colore.
 function buttonStyle(type: "vote" | "reprimand", active: "vote" | "reprimand" | "null") {
     const isActive = type === active;
 

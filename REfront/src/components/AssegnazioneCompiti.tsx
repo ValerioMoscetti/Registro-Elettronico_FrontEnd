@@ -51,7 +51,7 @@ export function AssegnazioneCompiti() {
       } else {
         console.log("sia test sia message non vanno bene")
       }
-    
+
       setHomeWorkTest(homeWorkTest)
       console.log(homeWorkTest)
       const response = await api.post(`/api/${homeWorkTest.path}`, homeWorkTest)
@@ -111,9 +111,10 @@ export function AssegnazioneCompiti() {
 
 
 
-
+      {/*form a destra*/}
       <div className="flex flex-col gap-4 max-w-sm">
 
+        {/** input per la descrizione del compito */}
         <input
           placeholder="Descrizione compito"
           type="text"
@@ -124,6 +125,7 @@ export function AssegnazioneCompiti() {
           )}
         />
 
+        {/* tipologia test */}
         <select
           title="tipologia test"
           value={testType as string}
@@ -146,14 +148,16 @@ export function AssegnazioneCompiti() {
           Invia dati della lezione
         </button>
 
+
+        {/*devo cambiare la logica e renderlo piu sensatos*/}
         {homeWorkTest ? (
           <ul className="space-y-1">
             {
-            testType!==null? (<li>Tipologia test: {homeWorkTest.type}</li>):
-            (<li>Tipologia test: {homeWorkTest.message}</li>)
+              testType !== null ? (<li>Tipologia test: {homeWorkTest.type}</li>) :
+                (<li>Tipologia test: {homeWorkTest.message}</li>)
             }
             <li>Per il giorno {homeWorkTest.dueDate?.toLocaleDateString('it-IT', { weekday: 'long' })} {homeWorkTest.dueDate?.getDate()}</li>
-            
+
           </ul>
         ) : (
           <span className="text-muted-foreground">Devi scegliere la data e compilare i campi</span>

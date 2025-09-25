@@ -6,16 +6,16 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 
 
-
+//CAMBIARE LO STIDE DEI BOTTONI -> FARE DELLE SELECT, BOTTONI BOCCIATI
 export function GestioneMateriaClasse() {
 
     return (
         <div>
-            <div>
-                <form>
-                    <ClassiForm></ClassiForm>
-                </form>
-            </div>
+
+            <form> {}
+                <ClassiForm></ClassiForm>
+            </form>
+
         </div>
     )
 }
